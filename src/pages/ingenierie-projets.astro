@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Timeline from '../components/Timeline.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
+import hero from '../assets/images/chantier-silos-aerien.jpg';
+import photo from '../assets/images/chantier-batiment-depoussierage.jpg';
+
+const steps = [
+  { title: 'Cahier des charges', icon: 'clipboard', text: 'Nous analysons votre besoin sur site : volumes, débits, produits, contraintes réglementaires et évolutions futures.' },
+  { title: 'Diagrammes & plans', icon: 'diagram', text: 'Conception des diagrammes de flux et des plans d’implantation de l’installation.' },
+  { title: 'Chiffrage', icon: 'calculator', text: 'Nous chiffrons la solution technique la plus adaptée, poste par poste.' },
+  { title: 'Coordination de chantier', icon: 'hardhat', text: 'Nous accompagnons et coordonnons les différents intervenants : génie civil, montage, électricité.' },
+  { title: 'Réglages & mise en route', icon: 'power', text: 'Réglage des appareils, essais et mise en route de l’installation avec vos équipes.' },
+] as const;
+---
+<BaseLayout
+  title="Ingénierie & projets clés en main de silos à grain"
+  description="Projets de stockage de grain clés en main : cahier des charges, diagrammes, plans, chiffrage, coordination de chantier et mise en route. MTE, Loiret."
+>
+  <PageHero title="Ingénierie & projets clés en main" eyebrow="Nos métiers" image={hero}
+    imageAlt="Vue aérienne d’un chantier de silos à grain en construction"
+    lead="MTE réalise des installations sur mesure, de la rédaction du cahier des charges jusqu’à la mise en route." />
+
+  <section class="section" aria-labelledby="demarche">
+    <div class="container-mte">
+      <SectionHeading id="demarche" eyebrow="Notre démarche" title="Cinq étapes, un seul interlocuteur"
+        lead="Création d’un site de stockage, extension ou modernisation : nous suivons votre projet du premier relevé à la première récolte." />
+      <Timeline steps={[...steps]} />
+    </div>
+  </section>
+
+  <section class="section bg-steel-50" aria-labelledby="pourquoi">
+    <div class="container-mte grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading id="pourquoi" eyebrow="Clés en main" title="Une installation conçue autour de votre site" />
+        <div class="prose-mte">
+          <p>Chaque site est différent : surface disponible, accès des camions, réseau électrique, installations existantes. Nous partons du terrain pour dessiner une solution cohérente.</p>
+          <p>Nous comparons les options techniques et retenons la plus adaptée à vos volumes, à vos débits et à votre budget. Le chiffrage est détaillé pour que vous sachiez ce que vous achetez.</p>
+          <p>Sur le chantier, MTE coordonne les entreprises. Vous gardez un seul interlocuteur jusqu’à la mise en route.</p>
+        </div>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+          {['Création de sites de stockage', 'Extension de capacité', 'Modernisation de la manutention', 'Mise en conformité et sécurité'].map((t) => (
+            <li class="flex items-start gap-3 font-semibold"><Icon name="check" size={22} class="mt-0.5 shrink-0 text-mte" />{t}</li>
+          ))}
+        </ul>
+      </div>
+      <Image src={photo} alt="Bâtiment de stockage avec tour de manutention et réseau de dépoussiérage" widths={[480, 800, 1100]}
+        sizes="(min-width:1024px) 50vw, 100vw" class="aspect-[4/3] w-full object-cover" />
+    </div>
+  </section>
+
+  <CtaBanner title="Vous avez un projet de stockage ?" text="Envoyez-nous les grandes lignes : nous revenons vers vous pour une première visite et l’analyse de votre besoin." />
+</BaseLayout>

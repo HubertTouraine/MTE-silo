@@ -1,0 +1,12 @@
+Déposez ici les fichiers source, puis lancez : npm run images:import
+
+Noms attendus (jpg, png ou webp) :
+  logo-mte.png                   logo officiel (idéalement PNG transparent ou SVG converti en PNG)
+  banniere-silos-orage.jpg       bannière complète (logo + photo silos + 4 vignettes)
+  chantier-sechoir.jpg           (optionnel) photo du séchoir en haute définition
+  chantier-batiment-depoussierage.jpg (optionnel)
+  chantier-tour-manutention.jpg  (optionnel)
+  chantier-silos-aerien.jpg      (optionnel)
+
+Si les photos de chantier ne sont pas fournies séparément, elles sont découpées
+automatiquement dans la bannière (résolution plus faible).

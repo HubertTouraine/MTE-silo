@@ -1,0 +1,75 @@
+---
+// Galerie de réalisations, filtrable par catégorie (filtrage côté client, sans dépendance).
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIES, type Category } from '../config';
+import Icon from './Icon.astro';
+interface Props { items: CollectionEntry<'realisations'>[]; filters?: boolean; headingLevel?: 'h2' | 'h3' }
+const { items, filters = true, headingLevel = 'h2' } = Astro.props;
+const H = headingLevel;
+const used = new Set(items.flatMap((i) => i.data.categories));
+const cats = (Object.keys(CATEGORIES) as Category[]).filter((c) => used.has(c));
+---
+<div data-gallery>
+  {filters && (
+    <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filtrer les réalisations">
+      <button type="button" class="filter-btn" aria-pressed="true" data-filter="all">Toutes</button>
+      {cats.map((c) => <button type="button" class="filter-btn" aria-pressed="false" data-filter={c}>{CATEGORIES[c]}</button>)}
+    </div>
+  )}
+  <p class="sr-only" aria-live="polite" data-gallery-status></p>
+  <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {items.map((r, i) => (
+      <li data-categories={r.data.categories.join(' ')}>
+        <article class="group relative flex h-full flex-col overflow-hidden border border-steel-200 bg-white">
+          <div class="aspect-[4/3] overflow-hidden bg-steel-100">
+            <Image src={r.data.cover} alt={r.data.coverAlt} widths={[400, 640, 900]} sizes="(min-width:1024px) 400px, (min-width:640px) 50vw, 100vw"
+              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading={i < 3 ? 'eager' : 'lazy'} />
+          </div>
+          <div class="flex flex-1 flex-col p-5">
+            <ul class="mb-3 flex flex-wrap gap-2" aria-label="Catégories">
+              {r.data.categories.map((c) => <li class="bg-steel-100 px-2 py-0.5 font-display text-sm font-semibold uppercase tracking-wider text-steel-800">{CATEGORIES[c]}</li>)}
+            </ul>
+            <H class="text-xl"><a href={`/realisations/${r.id}/`} class="after:absolute after:inset-0 hover:text-mte focus-visible:outline-none">{r.data.title}</a></H>
+            <p class="mt-2 flex-1 text-steel-700">{r.data.description}</p>
+            <span class="mt-4 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-wider text-mte" aria-hidden="true">Voir la réalisation <Icon name="arrow" size={18} /></span>
+          </div>
+        </article>
+      </li>
+    ))}
+  </ul>
+</div>
+<style>
+  @reference "../styles/global.css";
+  .filter-btn {
+    @apply min-h-11 border-2 border-steel-800 px-4 font-display text-base font-semibold uppercase tracking-wider text-steel-900 transition-colors hover:bg-steel-100;
+  }
+  .filter-btn[aria-pressed='true'] { @apply border-mte bg-mte text-white; }
+  article:has(a:focus-visible) { outline: 3px solid var(--color-mte); outline-offset: 2px; }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = root.querySelectorAll<HTMLElement>('li[data-categories]');
+    const status = root.querySelector('[data-gallery-status]');
+    const apply = (f: string) => {
+      let n = 0;
+      cards.forEach((c) => {
+        const show = f === 'all' || (c.dataset.categories ?? '').split(' ').includes(f);
+        c.hidden = !show;
+        if (show) n++;
+      });
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
+      if (status) status.textContent = `${n} réalisation${n > 1 ? 's' : ''} affichée${n > 1 ? 's' : ''}`;
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      const f = b.dataset.filter ?? 'all';
+      apply(f);
+      const url = new URL(location.href);
+      f === 'all' ? url.searchParams.delete('categorie') : url.searchParams.set('categorie', f);
+      history.replaceState(null, '', url);
+    }));
+    const initial = new URL(location.href).searchParams.get('categorie');
+    if (initial && root.querySelector(`[data-filter="${CSS.escape(initial)}"]`)) apply(initial);
+  });
+</script>

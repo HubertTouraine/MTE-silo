@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingCall from '../components/FloatingCall.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;          // chemin absolu ou URL d'une image Open Graph
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+}
+const { title, description, image = '/og-mte.jpg', noindex = false, jsonLd = [] } = Astro.props;
+const site = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+const fullTitle = title.includes('MTE') ? title : `${title} | MTE – Créateur de silos`;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${site.origin}/#entreprise`,
+  name: 'MTE',
+  alternateName: 'MTE – Créateur de silos',
+  slogan: 'Créateur de silos',
+  description: 'Conception, fabrication, installation et maintenance de silos à grain et d’équipements agricoles et agro-industriels dans le Loiret (Centre-Val de Loire).',
+  url: site.origin + '/',
+  telephone: SITE.phoneIntl,
+  ...(SITE.email ? { email: SITE.email } : {}),
+  image: new URL('/og-mte.jpg', site).href,
+  logo: new URL('/apple-touch-icon.png', site).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    postalCode: SITE.address.postalCode,
+    addressLocality: SITE.address.city,
+    addressRegion: SITE.address.region,
+    addressCountry: SITE.address.country,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lon },
+  areaServed: ['Loiret', 'Centre-Val de Loire', 'France'],
+  knowsAbout: ['silos à grain', 'installation de silos', 'séchoir à grain', 'manutention de grain', 'dépoussiérage', 'métallerie', 'chaudronnerie'],
+  numberOfEmployees: { '@type': 'QuantitativeValue', minValue: 11, maxValue: 50 },
+};
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#d0141e" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="MTE – Créateur de silos" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="geo.region" content="FR-45" />
+    <meta name="geo.placename" content="Puiseaux" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    <main id="contenu" class="flex-1" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <FloatingCall />
+  </body>
+</html>

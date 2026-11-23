@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/Icon.astro';
+import Todo from '../components/Todo.astro';
+import { SITE } from '../config';
+const { lat, lon } = SITE.geo;
+const bbox = [lon - 0.03, lat - 0.015, lon + 0.03, lat + 0.015].map((n) => n.toFixed(4)).join('%2C');
+const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lon}`;
+const mapLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=15/${lat}/${lon}`;
+---
+<BaseLayout
+  title="Contact et demande de devis – MTE à Puiseaux (45)"
+  description="Contactez MTE à Puiseaux (Loiret) pour un devis de silo à grain, séchoir ou manutention, ou pour un dépannage : 02 38 33 51 13, 23 route de Briarres."
+>
+  <PageHero title="Contact & devis" eyebrow="Parlons de votre projet"
+    lead="Un projet, une question, une panne ? Remplissez le formulaire ou appelez-nous directement." />
+
+  <section class="section">
+    <div class="container-mte grid gap-12 lg:grid-cols-[3fr_2fr]">
+      <div>
+        <h2 class="mb-6 text-3xl">Demande de devis ou d’information</h2>
+        <ContactForm />
+      </div>
+
+      <aside class="space-y-6" aria-label="Coordonnées">
+        <div class="border-l-8 border-mte bg-steel-950 p-6 text-white">
+          <p class="font-display text-xl font-semibold uppercase tracking-wide">Urgence / dépannage</p>
+          <a href={SITE.phoneHref} class="mt-2 inline-flex items-center gap-3 font-display text-4xl font-bold text-white hover:underline" aria-label={`Appeler MTE au ${SITE.phone}`}>
+            <Icon name="phone" size={30} class="text-mte-50" />{SITE.phone}
+          </a>
+        </div>
+
+        <div class="border border-steel-200 p-6">
+          <h2 class="mb-4 text-2xl">Coordonnées</h2>
+          <address class="space-y-4 not-italic text-steel-800">
+            <p class="flex gap-3"><Icon name="pin" size={22} class="mt-0.5 shrink-0 text-mte" />
+              <span><strong class="text-steel-950">MTE</strong><br />{SITE.address.street}<br />{SITE.address.postalCode} {SITE.address.city}<br />{SITE.address.department}, {SITE.address.region}</span></p>
+            <p><a href={SITE.phoneHref} class="flex gap-3 font-semibold hover:text-mte"><Icon name="phone" size={22} class="shrink-0 text-mte" />{SITE.phone}</a></p>
+            <p class="flex gap-3"><Icon name="mail" size={22} class="shrink-0 text-mte" />
+              {SITE.email ? <a href={`mailto:${SITE.email}`} class="hover:text-mte">{SITE.email}</a> : <Todo label="adresse email" />}</p>
+          </address>
+        </div>
+
+        <div class="border border-steel-200 p-6">
+          <h2 class="mb-4 flex items-center gap-3 text-2xl"><Icon name="clock" size={24} class="text-mte" />Horaires</h2>
+          {SITE.hours.length ? (
+            <dl class="space-y-1">{SITE.hours.map((h) => <div class="flex justify-between gap-4"><dt>{h.days}</dt><dd class="font-semibold">{h.time}</dd></div>)}</dl>
+          ) : <p><Todo label="horaires d’ouverture du bureau et de l’atelier" /></p>}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="carte" class="border-t border-steel-200">
+    <h2 id="carte" class="sr-only">Plan d’accès</h2>
+    <iframe
+      src={mapSrc}
+      title="Carte OpenStreetMap : MTE à Puiseaux (Loiret)"
+      class="block h-[400px] w-full border-0 grayscale-[30%]"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+    ></iframe>
+    <p class="container-mte py-3 text-sm text-steel-700">
+      <a href={mapLink} class="underline hover:text-mte" rel="noopener">Agrandir la carte sur OpenStreetMap</a> ·
+      Position du marqueur à vérifier : <Todo label="coordonnées GPS exactes du site (src/config.ts)" />
+    </p>
+  </section>
+</BaseLayout>

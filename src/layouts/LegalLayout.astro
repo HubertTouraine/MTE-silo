@@ -1,0 +1,14 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <PageHero title={title} />
+  <section class="section">
+    <div class="container-mte prose-mte max-w-3xl">
+      <slot />
+    </div>
+  </section>
+</BaseLayout>

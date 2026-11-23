@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Gallery from '../../components/Gallery.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import hero from '../../assets/images/silos-orage.jpg';
+const items = (await getCollection('realisations', (r) => !r.data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  title="Réalisations : silos à grain, séchoirs, manutention, métallerie"
+  description="Découvrez les réalisations de MTE : installation de silos à grain, séchoirs, tours de manutention et ouvrages de métallerie en Centre-Val de Loire."
+>
+  <PageHero title="Nos réalisations" eyebrow="Chantiers" image={hero} imageAlt="Silos à grain et passerelle de manutention"
+    lead="Silos, séchoirs, manutention, métallerie : une sélection de chantiers réalisés par nos équipes." />
+  <section class="section" aria-label="Galerie des réalisations">
+    <div class="container-mte">
+      <Gallery items={items} />
+    </div>
+  </section>
+  <CtaBanner title="Votre projet sera peut-être le prochain" />
+</BaseLayout>

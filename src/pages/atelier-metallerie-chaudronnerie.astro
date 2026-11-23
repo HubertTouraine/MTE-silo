@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Todo from '../components/Todo.astro';
+import hero from '../assets/images/silos-orage.jpg';
+import photo from '../assets/images/chantier-tour-manutention.jpg';
+---
+<BaseLayout
+  title="Atelier métallerie & chaudronnerie : passerelles, charpentes, pièces sur mesure"
+  description="Atelier intégré de métallerie et chaudronnerie à Puiseaux (45) : accès et passerelles, fosses, charpentes métalliques, matériel et pièces sur mesure pour silos."
+>
+  <PageHero title="Atelier métallerie & chaudronnerie" eyebrow="Fabrication" image={hero}
+    imageAlt="Passerelle de manutention métallique reliant des silos à grain"
+    lead="Notre atelier intégré fabrique ce que les catalogues ne proposent pas : structures, accès et pièces adaptés à votre installation." />
+
+  <section class="section" aria-labelledby="fabrications">
+    <div class="container-mte">
+      <SectionHeading id="fabrications" eyebrow="Nos fabrications" title="Fabriqué dans notre atelier, posé par nos équipes" />
+      <div class="grid gap-6 md:grid-cols-3">
+        <ServiceCard icon="stairs" title="Accès et passerelles" headingLevel="h3"
+          text="Escaliers, échelles, passerelles et garde-corps pour accéder aux silos et aux équipements en toute sécurité." />
+        <ServiceCard icon="beam" title="Fosses et charpentes métalliques" headingLevel="h3"
+          text="Fosses de réception, charpentes, supports de transporteurs et structures de tours de manutention." />
+        <ServiceCard icon="ruler" title="Matériel et pièces sur mesure" headingLevel="h3"
+          text="Trémies, goulottes, boisseaux, pièces d’adaptation : nous fabriquons à la cote pour vos installations neuves ou existantes." />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-steel-950 text-white" aria-labelledby="atout">
+    <div class="container-mte grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <Image src={photo} alt="Structure métallique d’une tour de manutention en cours de montage" widths={[480, 800, 1100]}
+        sizes="(min-width:1024px) 50vw, 100vw" class="aspect-[4/3] w-full object-cover" />
+      <div>
+        <p class="eyebrow !text-white">Atelier intégré</p>
+        <h2 id="atout" class="text-3xl !text-white sm:text-4xl">Maîtrise des délais et des cotes</h2>
+        <div class="mt-5 space-y-4 text-lg text-steel-200">
+          <p>Fabriquer nous-mêmes, c’est ajuster les pièces au relevé réel du site, sans attendre un fournisseur extérieur.</p>
+          <p>Les mêmes équipes conçoivent, fabriquent et posent. Les modifications de dernière minute sont prises en compte rapidement.</p>
+        </div>
+        <p class="mt-6 text-steel-200">Équipements de l’atelier : <Todo label="surface, machines, procédés de soudage, traitements (galvanisation, peinture)" /></p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner title="Une pièce ou une structure à fabriquer ?" text="Envoyez-nous vos plans, vos cotes ou une simple photo : nous étudions la fabrication." />
+</BaseLayout>

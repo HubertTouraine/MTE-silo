@@ -1,0 +1,54 @@
+---
+import { NAV, SITE } from '../config';
+import Icon from './Icon.astro';
+import Todo from './Todo.astro';
+const year = new Date().getFullYear();
+---
+<footer class="bg-steel-950 text-steel-200">
+  <div class="h-1 bg-mte" aria-hidden="true"></div>
+  <div class="container-mte grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <p class="font-display text-4xl font-bold uppercase tracking-wider text-white">MTE</p>
+      <p class="font-display text-lg font-semibold uppercase tracking-wider text-mte-50">Créateur de silos</p>
+      <p class="mt-4 text-steel-200">{SITE.activity}. Ingénierie, fournitures, atelier intégré, installation et maintenance.</p>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-lg text-white">Coordonnées</h2>
+      <address class="space-y-3 not-italic">
+        <p class="flex gap-3"><Icon name="pin" size={20} class="mt-0.5 shrink-0 text-mte-50" />
+          <span>{SITE.address.street}<br />{SITE.address.postalCode} {SITE.address.city} ({SITE.address.department})</span></p>
+        <p><a href={SITE.phoneHref} class="flex gap-3 font-semibold text-white hover:underline"><Icon name="phone" size={20} class="shrink-0 text-mte-50" />{SITE.phone}</a></p>
+        {SITE.email && <p><a href={`mailto:${SITE.email}`} class="flex gap-3 hover:underline"><Icon name="mail" size={20} class="shrink-0 text-mte-50" />{SITE.email}</a></p>}
+      </address>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-lg text-white">Horaires</h2>
+      {SITE.hours.length ? (
+        <ul class="space-y-1">{SITE.hours.map((h) => <li>{h.days} : {h.time}</li>)}</ul>
+      ) : (
+        <p><Todo label="horaires d’ouverture" /></p>
+      )}
+      <p class="mt-4 text-sm text-steel-400">Dépannage : appelez le <a href={SITE.phoneHref} class="font-semibold text-white underline">{SITE.phone}</a></p>
+    </div>
+
+    <nav aria-label="Plan du site">
+      <h2 class="mb-4 text-lg text-white">Plan du site</h2>
+      <ul class="space-y-2">
+        {NAV.map((i) => <li><a href={i.href} class="hover:text-white hover:underline">{i.label}</a></li>)}
+        <li><a href="/contact/" class="hover:text-white hover:underline">Contact & devis</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-steel-800">
+    <div class="container-mte flex flex-col gap-3 py-6 pb-24 text-sm text-steel-400 md:flex-row md:items-center md:justify-between md:pb-6">
+      <p>© {year} MTE – Créateur de silos · Puiseaux, Loiret (45)</p>
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a href="/mentions-legales/" class="hover:text-white hover:underline">Mentions légales</a></li>
+        <li><a href="/politique-de-confidentialite/" class="hover:text-white hover:underline">Politique de confidentialité</a></li>
+        <li><a href="/sitemap-index.xml" class="hover:text-white hover:underline">Sitemap</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

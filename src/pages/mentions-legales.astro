@@ -1,0 +1,43 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import Todo from '../components/Todo.astro';
+import { SITE } from '../config';
+---
+<LegalLayout title="Mentions légales" description="Mentions légales du site de MTE, créateur de silos à Puiseaux (Loiret) : éditeur, hébergeur, propriété intellectuelle.">
+  <p class="!max-w-3xl">Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN), voici les informations relatives à l’éditeur et à l’hébergeur du site.</p>
+
+  <h2>Éditeur du site</h2>
+  <ul>
+    <li>Raison sociale : MTE – <Todo label="dénomination sociale complète" /></li>
+    <li>Forme juridique : <Todo label="forme juridique (SARL, SAS…)" /> au capital de <Todo label="capital social" /></li>
+    <li>Siège social : {SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}</li>
+    <li>SIRET : <Todo label="numéro SIRET" /></li>
+    <li>RCS : <Todo label="ville et numéro RCS" /></li>
+    <li>N° TVA intracommunautaire : <Todo label="numéro de TVA" /></li>
+    <li>Téléphone : <a href={SITE.phoneHref}>{SITE.phone}</a></li>
+    <li>Email : {SITE.email || <Todo label="adresse email" />}</li>
+  </ul>
+
+  <h2>Directeur de la publication</h2>
+  <p><Todo label="nom et fonction du directeur de la publication" /></p>
+
+  <h2>Hébergeur</h2>
+  <p><Todo label="nom, adresse et téléphone de l’hébergeur (Netlify, Vercel ou OVH)" /></p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L’ensemble des contenus de ce site (textes, photographies, logo, éléments graphiques) est la propriété de MTE, sauf mention contraire. Toute reproduction, totale ou partielle, sans autorisation écrite préalable est interdite.</p>
+  <p>Crédits photos : <Todo label="crédits photographiques" /></p>
+
+  <h2>Responsabilité</h2>
+  <p>MTE s’efforce de fournir des informations exactes et à jour. Les informations présentées sur ce site sont données à titre indicatif et ne constituent pas une offre contractuelle. MTE ne saurait être tenue responsable des erreurs ou omissions, ni de l’utilisation faite de ces informations.</p>
+
+  <h2>Liens externes</h2>
+  <p>Le site peut contenir des liens vers d’autres sites (par exemple OpenStreetMap). MTE n’est pas responsable de leur contenu.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Le traitement des données transmises via le formulaire de contact est décrit dans notre <a href="/politique-de-confidentialite/">politique de confidentialité</a>.</p>
+
+  <h2>Droit applicable</h2>
+  <p>Les présentes mentions légales sont soumises au droit français.</p>
+  <p class="text-sm text-steel-700">Dernière mise à jour : <Todo label="date de mise à jour" /></p>
+</LegalLayout>

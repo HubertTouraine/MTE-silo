@@ -1,0 +1,22 @@
+---
+import { SITE } from '../config';
+import Icon from './Icon.astro';
+import Todo from './Todo.astro';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<aside class="border-l-8 border-mte bg-steel-950 p-6 text-white md:p-10" aria-labelledby="urgence-titre">
+  <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <div class="flex gap-4">
+      <span class="inline-flex h-14 w-14 shrink-0 items-center justify-center bg-mte text-white"><Icon name="alert" size={30} /></span>
+      <div>
+        <h2 id="urgence-titre" class="text-3xl !text-white md:text-4xl">Urgence – panne sur votre installation</h2>
+        <p class="mt-2 text-lg text-steel-100">Manutention bloquée, séchoir à l’arrêt en pleine récolte ? Appelez directement nos techniciens.</p>
+        {!compact && <p class="mt-2 text-steel-200">Disponibilité et astreinte : <Todo label="jours, horaires et conditions d’intervention en urgence" /></p>}
+      </div>
+    </div>
+    <a href={SITE.phoneHref} class="btn-primary shrink-0 text-2xl md:min-h-16 md:px-8" aria-label={`Appel d’urgence : ${SITE.phone}`}>
+      <Icon name="phone" size={26} /> {SITE.phone}
+    </a>
+  </div>
+</aside>

@@ -1,0 +1,12 @@
+---
+import { SITE } from '../config';
+import Icon from './Icon.astro';
+---
+<a
+  href={SITE.phoneHref}
+  class="fixed bottom-4 right-4 z-40 inline-flex h-14 items-center gap-2 bg-mte px-5 font-display text-lg font-semibold uppercase tracking-wide text-white shadow-lg shadow-steel-950/30 hover:bg-mte-dark md:hidden"
+  aria-label={`Appeler MTE au ${SITE.phone}`}
+>
+  <Icon name="phone" size={22} />
+  Appeler
+</a>

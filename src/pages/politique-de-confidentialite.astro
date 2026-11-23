@@ -1,0 +1,39 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import Todo from '../components/Todo.astro';
+import { SITE, FORM } from '../config';
+const prestataire = FORM.provider === 'netlify' ? 'Netlify (Netlify Forms)' : 'Formspree';
+---
+<LegalLayout title="Politique de confidentialité" description="Politique de confidentialité du site MTE : données collectées via le formulaire de contact, finalités, durée de conservation et droits RGPD.">
+  <p>Cette page explique quelles données personnelles MTE collecte sur ce site, pourquoi, et comment exercer vos droits, conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés.</p>
+
+  <h2>Responsable du traitement</h2>
+  <p>MTE, {SITE.address.street}, {SITE.address.postalCode} {SITE.address.city}. Représentée par <Todo label="nom du responsable / dirigeant" />.<br />
+  Contact : <a href={SITE.phoneHref}>{SITE.phone}</a> – {SITE.email || <Todo label="adresse email de contact RGPD" />}</p>
+
+  <h2>Données collectées</h2>
+  <p>Via le formulaire de contact uniquement : nom, société, téléphone, email, type de client, type de projet et contenu du message. Aucune donnée n’est collectée à votre insu.</p>
+
+  <h2>Finalités et base légale</h2>
+  <ul>
+    <li>Répondre à vos demandes de devis ou d’information (base légale : votre consentement et mesures précontractuelles).</li>
+    <li>Assurer le suivi de la relation commerciale (base légale : intérêt légitime).</li>
+  </ul>
+
+  <h2>Destinataires</h2>
+  <p>Les données sont destinées aux seules équipes de MTE. Elles transitent par notre prestataire de formulaire, {prestataire}, qui agit comme sous-traitant. Elles ne sont ni vendues ni cédées à des tiers.</p>
+  <p>Transferts hors Union européenne : <Todo label="à vérifier selon le prestataire de formulaire et l’hébergeur retenus" /></p>
+
+  <h2>Durée de conservation</h2>
+  <p><Todo label="durée de conservation (ex. 3 ans après le dernier contact pour un prospect)" /></p>
+
+  <h2>Vos droits</h2>
+  <p>Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité de vos données. Pour les exercer, contactez-nous par téléphone au {SITE.phone} ou par email : {SITE.email || <Todo label="adresse email" />}.</p>
+  <p>Vous pouvez également introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a>).</p>
+
+  <h2>Cookies et mesure d’audience</h2>
+  <p>Ce site n’utilise pas de cookie publicitaire ni de traceur nécessitant votre consentement. La carte d’accès est fournie par OpenStreetMap.</p>
+  <p>Outil de mesure d’audience : <Todo label="aucun / outil utilisé (si ajouté, mettre à jour cette section)" /></p>
+
+  <p class="text-sm text-steel-700">Dernière mise à jour : <Todo label="date de mise à jour" /></p>
+</LegalLayout>

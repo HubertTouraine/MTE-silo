@@ -1,0 +1,80 @@
+---
+import { NAV, SITE } from '../config';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+<header class="sticky top-0 z-40 border-b border-steel-200 bg-white">
+  <a href="#contenu" class="sr-only z-50 bg-mte px-4 py-2 text-white focus:not-sr-only focus:absolute focus:left-2 focus:top-2">Aller au contenu</a>
+  <div class="h-1 bg-mte" aria-hidden="true"></div>
+  <div class="container-mte flex h-16 items-center justify-between gap-4 lg:h-20">
+    <a href="/" class="flex shrink-0 items-center gap-3" aria-label="MTE – Créateur de silos, retour à l’accueil">
+      <Logo class="h-9 w-auto lg:h-11" height={44} />
+      <span class="hidden border-l border-steel-200 pl-3 font-display text-sm font-semibold uppercase leading-tight tracking-wider text-steel-700 xl:block">Créateur<br />de silos</span>
+    </a>
+
+    <nav aria-label="Navigation principale" class="hidden lg:block">
+      <ul class="flex items-center gap-0.5 xl:gap-1">
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class="block px-2 py-2 font-display text-[0.95rem] font-semibold uppercase tracking-wide text-steel-800 transition-colors hover:text-mte aria-[current=page]:text-mte xl:px-3"
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="/contact/" class="btn-outline hidden min-h-11 px-4 py-2 text-base lg:inline-flex">Devis</a>
+      <a href={SITE.phoneHref} class="btn-primary min-h-11 px-3 py-2 text-base sm:px-4" aria-label={`Appeler MTE au ${SITE.phone}`}>
+        <Icon name="phone" size={20} />
+        <span class="hidden sm:inline">{SITE.phone}</span>
+      </a>
+      <button
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center text-steel-900 hover:bg-steel-100 lg:hidden"
+        aria-controls="menu-mobile"
+        aria-expanded="false"
+        data-menu-toggle
+      >
+        <span class="sr-only" data-menu-label>Ouvrir le menu</span>
+        <Icon name="menu" size={28} class="menu-open" />
+        <Icon name="close" size={28} class="menu-close hidden" />
+      </button>
+    </div>
+  </div>
+
+  <nav id="menu-mobile" aria-label="Navigation mobile" class="hidden border-t border-steel-200 bg-white lg:hidden" data-menu>
+    <ul class="container-mte divide-y divide-steel-100 py-2">
+      <li><a href="/" class="block py-3 font-display text-xl font-semibold uppercase tracking-wide text-steel-900 aria-[current=page]:text-mte" aria-current={path === '/' ? 'page' : undefined}>Accueil</a></li>
+      {NAV.map((item) => (
+        <li><a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined} class="block py-3 font-display text-xl font-semibold uppercase tracking-wide text-steel-900 aria-[current=page]:text-mte">{item.label}</a></li>
+      ))}
+      <li><a href="/contact/" aria-current={isActive('/contact/') ? 'page' : undefined} class="block py-3 font-display text-xl font-semibold uppercase tracking-wide text-steel-900 aria-[current=page]:text-mte">Contact & devis</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const label = document.querySelector<HTMLElement>('[data-menu-label]');
+  if (btn && menu) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      menu.classList.toggle('hidden', !open);
+      btn.querySelector('.menu-open')?.classList.toggle('hidden', open);
+      btn.querySelector('.menu-close')?.classList.toggle('hidden', !open);
+      if (label) label.textContent = open ? 'Fermer le menu' : 'Ouvrir le menu';
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { set(false); btn.focus(); }
+    });
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => { if (e.matches) set(false); });
+  }
+</script>

@@ -1,0 +1,75 @@
+---
+// Formulaire de contact. Fournisseur réglé dans src/config.ts (FORM) via les variables
+// PUBLIC_FORM_PROVIDER ('netlify' | 'formspree') et PUBLIC_FORM_ENDPOINT (URL Formspree).
+import { FORM } from '../config';
+const isNetlify = FORM.provider === 'netlify';
+const action = isNetlify ? '/merci/' : FORM.endpoint;
+const typesClient = ['Organisme stockeur', 'Agriculteur', 'Meunier', 'Usine d’aliment', 'Station de semence', 'Industrie agro-alimentaire', 'Autre'];
+const typesProjet = ['Nouvelle installation / projet clé en main', 'Extension ou modernisation', 'Fourniture d’équipement', 'Atelier : fabrication sur mesure', 'Maintenance préventive', 'Dépannage', 'Autre'];
+const field = 'mt-1 block w-full min-h-12 border-2 border-steel-400 bg-white px-3 py-2 text-base text-steel-950 focus:border-mte focus:outline-none focus-visible:outline-none';
+const label = 'block font-semibold text-steel-900';
+---
+{!isNetlify && !FORM.endpoint && (
+  <p class="todo mb-6 block">[À COMPLÉTER : PUBLIC_FORM_ENDPOINT – URL Formspree non renseignée]</p>
+)}
+<form
+  name="contact"
+  method="POST"
+  action={action}
+  data-netlify={isNetlify ? 'true' : undefined}
+  netlify-honeypot={isNetlify ? 'bot-field' : undefined}
+  class="grid gap-5 sm:grid-cols-2"
+>
+  {isNetlify && <input type="hidden" name="form-name" value="contact" />}
+  {!isNetlify && <input type="hidden" name="_subject" value="Nouvelle demande depuis le site MTE" />}
+  <p class="hidden" aria-hidden="true">
+    <label>Ne pas remplir : <input name={isNetlify ? 'bot-field' : '_gotcha'} tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div>
+    <label for="nom" class={label}>Nom <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <input id="nom" name="nom" type="text" required autocomplete="name" class={field} />
+  </div>
+  <div>
+    <label for="societe" class={label}>Société / exploitation</label>
+    <input id="societe" name="societe" type="text" autocomplete="organization" class={field} />
+  </div>
+  <div>
+    <label for="telephone" class={label}>Téléphone <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <input id="telephone" name="telephone" type="tel" required autocomplete="tel" inputmode="tel" class={field} />
+  </div>
+  <div>
+    <label for="email" class={label}>Email <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <input id="email" name="email" type="email" required autocomplete="email" class={field} />
+  </div>
+  <div>
+    <label for="type-client" class={label}>Vous êtes <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <select id="type-client" name="type_client" required class={field}>
+      <option value="">Choisir…</option>
+      {typesClient.map((t) => <option>{t}</option>)}
+    </select>
+  </div>
+  <div>
+    <label for="type-projet" class={label}>Type de projet <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <select id="type-projet" name="type_projet" required class={field}>
+      <option value="">Choisir…</option>
+      {typesProjet.map((t) => <option>{t}</option>)}
+    </select>
+  </div>
+  <div class="sm:col-span-2">
+    <label for="message" class={label}>Votre message <span class="text-mte-dark" aria-hidden="true">*</span></label>
+    <textarea id="message" name="message" rows="6" required class={`${field} min-h-36`}
+      aria-describedby="message-aide"></textarea>
+    <p id="message-aide" class="mt-1 text-sm text-steel-700">Précisez si possible : lieu du site, capacité ou débit souhaités, délais.</p>
+  </div>
+  <div class="sm:col-span-2">
+    <label class="flex items-start gap-3">
+      <input type="checkbox" name="consentement" value="oui" required class="mt-1 h-5 w-5 shrink-0 accent-mte" />
+      <span class="text-steel-800">J’accepte que MTE utilise ces informations pour répondre à ma demande. Voir notre <a href="/politique-de-confidentialite/" class="font-semibold text-mte-dark underline">politique de confidentialité</a>. <span class="text-mte-dark" aria-hidden="true">*</span></span>
+    </label>
+  </div>
+  <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-steel-700"><span aria-hidden="true">*</span> Champs obligatoires</p>
+    <button type="submit" class="btn-primary">Envoyer ma demande</button>
+  </div>
+</form>

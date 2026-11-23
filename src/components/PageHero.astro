@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props {
+  title: string;
+  eyebrow?: string;
+  lead?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  crumbs?: { href: string; label: string }[];
+}
+const { title, eyebrow, lead, image, imageAlt = '', crumbs = [] } = Astro.props;
+const trail = [{ href: '/', label: 'Accueil' }, ...crumbs];
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [...trail, { href: Astro.url.pathname, label: title }].map((c, i) => ({
+    '@type': 'ListItem', position: i + 1, name: c.label, item: new URL(c.href, Astro.site).href,
+  })),
+};
+---
+<section class="relative isolate overflow-hidden bg-steel-950 text-white">
+  {image && (
+    <Image src={image} alt={imageAlt} widths={[640, 1024, 1600, 2000]} sizes="100vw" loading="eager" fetchpriority="high"
+      class="absolute inset-0 -z-10 h-full w-full object-cover opacity-45" />
+  )}
+  <div class="absolute inset-0 -z-10 bg-gradient-to-r from-steel-950 via-steel-950/85 to-steel-950/30" aria-hidden="true"></div>
+  <div class="container-mte py-14 md:py-20 lg:py-24">
+    <nav aria-label="Fil d’Ariane" class="mb-6 text-sm text-steel-200">
+      <ol class="flex flex-wrap items-center gap-2">
+        {trail.map((c) => (<li class="flex items-center gap-2"><a href={c.href} class="hover:text-white hover:underline">{c.label}</a><span aria-hidden="true">/</span></li>))}
+        <li aria-current="page" class="text-white">{title}</li>
+      </ol>
+    </nav>
+    {eyebrow && <p class="eyebrow !text-white before:!bg-mte">{eyebrow}</p>}
+    <h1 class="max-w-4xl text-4xl text-white sm:text-5xl lg:text-6xl">{title}</h1>
+    {lead && <p class="mt-5 max-w-2xl text-lg text-steel-100 md:text-xl">{lead}</p>}
+    <slot />
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+</section>

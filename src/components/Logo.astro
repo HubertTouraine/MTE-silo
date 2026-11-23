@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo-mte.png';
+interface Props { class?: string; height?: number; loading?: 'eager' | 'lazy' }
+const { class: cls = 'h-10 w-auto', height = 48, loading = 'eager' } = Astro.props;
+const width = Math.round((logo.width / logo.height) * height);
+---
+<Image
+  src={logo}
+  alt="MTE – Créateur de silos"
+  height={height}
+  width={width}
+  densities={[1, 2]}
+  format="png"
+  loading={loading}
+  fetchpriority={loading === 'eager' ? 'high' : undefined}
+  class={cls}
+/>

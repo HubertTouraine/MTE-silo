@@ -1,0 +1,27 @@
+---
+import Icon from './Icon.astro';
+interface Props { title: string; text: string; href?: string; icon: Parameters<typeof Icon>[0]['name']; index?: string; headingLevel?: 'h2' | 'h3' }
+const { title, text, href, icon, index, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+<article class="group relative flex h-full flex-col border border-steel-200 bg-white p-6 transition-colors hover:border-mte md:p-8">
+  <div class="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-mte transition-transform group-hover:scale-x-100" aria-hidden="true"></div>
+  <div class="mb-6 flex items-start justify-between">
+    <span class="inline-flex h-14 w-14 items-center justify-center bg-steel-100 text-mte"><Icon name={icon} size={30} /></span>
+    {index && <span class="font-display text-4xl font-bold text-steel-200 before:content-[attr(data-num)]" data-num={index} aria-hidden="true"></span>}
+  </div>
+  <H class="mb-3 text-2xl">
+    {href ? <a href={href} class="after:absolute after:inset-0 hover:text-mte focus-visible:outline-none">{title}</a> : title}
+  </H>
+  <p class="flex-1 text-steel-700">{text}</p>
+  <slot />
+  {href && (
+    <span class="mt-6 inline-flex items-center gap-2 font-display font-semibold uppercase tracking-wider text-mte" aria-hidden="true">
+      En savoir plus <Icon name="arrow" size={18} class="transition-transform group-hover:translate-x-1" />
+    </span>
+  )}
+</article>
+<style>
+  /* rend la carte entière cliquable tout en gardant un seul lien accessible ; focus visible sur toute la carte */
+  article:has(a:focus-visible) { outline: 3px solid var(--color-mte); outline-offset: 2px; }
+</style>

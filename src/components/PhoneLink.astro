@@ -1,0 +1,10 @@
+---
+import { SITE } from '../config';
+import Icon from './Icon.astro';
+interface Props { class?: string; label?: string; icon?: boolean }
+const { class: cls = '', label, icon = true } = Astro.props;
+---
+<a href={SITE.phoneHref} class={cls} aria-label={`Appeler MTE au ${SITE.phone}`}>
+  {icon && <Icon name="phone" size={20} class="shrink-0" />}
+  <span>{label ?? SITE.phone}</span>
+</a>

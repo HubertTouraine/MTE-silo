@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
+import Todo from '../components/Todo.astro';
+import hero from '../assets/images/chantier-tour-manutention.jpg';
+
+const familles = [
+  { id: 'manutention', title: 'Manutention', icon: 'elevator',
+    text: 'Élévateurs à godets, transporteurs à chaîne et à bande, vis, aéroglisseurs : nous dimensionnons les circuits selon vos débits et vos produits.',
+    points: ['Réception et reprise', 'Transfert entre cellules', 'Chargement camions'] },
+  { id: 'sechoirs', title: 'Séchoirs continus et à recirculation', icon: 'flame',
+    text: 'Séchoirs à grain continus pour les forts débits, séchoirs à recirculation pour les volumes plus modestes. Choix et raccordement adaptés à votre installation.',
+    points: ['Maïs, céréales, oléagineux', 'Raccordement à la manutention', 'Réglages en début de campagne'] },
+  { id: 'nettoyage', title: 'Équipements de nettoyage et de calibrage', icon: 'sieve',
+    text: 'Nettoyeurs-séparateurs, épurateurs et calibreurs pour livrer un grain propre et homogène, adapté à sa destination.',
+    points: ['Pré-nettoyage à la réception', 'Calibrage des semences', 'Évacuation des déchets'] },
+  { id: 'depoussierage', title: 'Dépoussiérage et filtration', icon: 'wind',
+    text: 'Réseaux d’aspiration, cyclones et filtres pour limiter les poussières, protéger les équipes et réduire les risques.',
+    points: ['Captation aux points d’émission', 'Filtres et cyclones', 'Amélioration de la sécurité du site'] },
+  { id: 'boisseaux', title: 'Boisseaux de chargement', icon: 'hopper',
+    text: 'Boisseaux de chargement pour un chargement rapide des camions, avec trappes et goulottes adaptées à votre trafic.',
+    points: ['Chargement vrac rapide', 'Trappes manuelles ou motorisées', 'Fabrication sur mesure possible'] },
+  { id: 'electricite', title: 'Armoires électriques et asservissements', icon: 'cabinet',
+    text: 'Armoires de commande, automatismes et asservissements pour piloter la manutention en sécurité et enchaîner les circuits.',
+    points: ['Commande des circuits', 'Sécurités et asservissements', 'Évolution des armoires existantes'] },
+] as const;
+---
+<BaseLayout
+  title="Fournitures : manutention, séchoirs à grain, nettoyage, dépoussiérage"
+  description="Fourniture d’équipements de silos : manutention de grain, séchoirs continus et à recirculation, nettoyage, calibrage, dépoussiérage, boisseaux, armoires électriques."
+>
+  <PageHero title="Fournitures" eyebrow="Équipements" image={hero} imageAlt="Tour de manutention et équipements de silo"
+    lead="Nous sélectionnons, fournissons et installons les équipements adaptés à votre site de stockage." />
+
+  <nav aria-label="Familles d’équipements" class="sticky top-[4.25rem] z-30 border-b border-steel-200 bg-white lg:top-[5.25rem]">
+    <ul class="container-mte flex gap-1 overflow-x-auto py-2 [scrollbar-width:thin]">
+      {familles.map((f) => (
+        <li class="shrink-0"><a href={`#${f.id}`} class="block whitespace-nowrap px-3 py-2 font-display font-semibold uppercase tracking-wide text-steel-800 hover:bg-steel-100 hover:text-mte">{f.title}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="section">
+    <div class="container-mte space-y-6">
+      <SectionHeading eyebrow="Six familles" title="Le matériel adapté à chaque étape du grain"
+        lead="De la fosse de réception au chargement des camions, nous équipons l’ensemble de votre installation." />
+      {familles.map((f, i) => (
+        <section id={f.id} aria-labelledby={`${f.id}-titre`} class="grid gap-6 border border-steel-200 p-6 md:grid-cols-[auto_1fr_1fr] md:gap-10 md:p-10">
+          <div class="flex items-start gap-4 md:flex-col">
+            <span class="inline-flex h-16 w-16 items-center justify-center bg-mte text-white"><Icon name={f.icon} size={34} /></span>
+            <span class="font-display text-5xl font-bold text-steel-200 before:content-[attr(data-num)]" data-num={String(i + 1).padStart(2, '0')} aria-hidden="true"></span>
+          </div>
+          <div>
+            <h2 id={`${f.id}-titre`} class="text-3xl">{f.title}</h2>
+            <p class="mt-3 text-lg text-steel-700">{f.text}</p>
+          </div>
+          <ul class="space-y-2 self-center border-l-4 border-steel-200 pl-5">
+            {f.points.map((p) => <li class="flex items-start gap-2 font-semibold text-steel-900"><Icon name="check" size={20} class="mt-0.5 shrink-0 text-mte" />{p}</li>)}
+          </ul>
+        </section>
+      ))}
+      <p class="text-steel-700">Marques et partenaires fabricants : <Todo label="marques distribuées / partenaires" /></p>
+    </div>
+  </div>
+
+  <CtaBanner title="Besoin d’un équipement ?" text="Remplacement, ajout de capacité ou nouvelle installation : décrivez votre besoin, nous vous proposons le matériel adapté." />
+</BaseLayout>

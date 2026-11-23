@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Icon from '../components/Icon.astro';
+import Todo from '../components/Todo.astro';
+import { SECTEURS } from '../data/secteurs';
+import hero from '../assets/images/chantier-silos-aerien.jpg';
+---
+<BaseLayout
+  title="Nos clients : organismes stockeurs, agriculteurs, meuniers, agro-industrie"
+  description="MTE équipe les organismes stockeurs, agriculteurs, meuniers, usines d’aliment, stations de semence et industries agro-alimentaires en silos et manutention de grain."
+>
+  <PageHero title="Nos clients & secteurs" eyebrow="Pour qui" image={hero}
+    imageAlt="Site de silos à grain en construction vu du ciel"
+    lead="Du stockage à la ferme au site de collecte, nous adaptons chaque installation au métier de nos clients." />
+
+  <section class="section" aria-labelledby="secteurs">
+    <div class="container-mte">
+      <SectionHeading id="secteurs" eyebrow="Six secteurs" title="Ce que MTE vous apporte" />
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {SECTEURS.map((s) => (
+          <li id={s.id} class="flex flex-col border border-steel-200 border-t-4 border-t-mte bg-white p-6 md:p-8">
+            <span class="mb-5 inline-flex h-16 w-16 items-center justify-center bg-steel-100 text-mte"><Icon name={s.icon} size={36} /></span>
+            <h3 class="text-2xl">{s.title}</h3>
+            <p class="mt-3 text-steel-700">{s.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-steel-50" aria-labelledby="references">
+    <div class="container-mte">
+      <SectionHeading id="references" eyebrow="Références" title="Ils nous font confiance" />
+      <p class="text-lg text-steel-700"><Todo label="logos ou noms de clients (avec leur accord) et éventuels témoignages réels" /></p>
+      <p class="mt-4 text-lg text-steel-700">Zone d’intervention : <Todo label="zone géographique d’intervention (départements / régions)" /></p>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>

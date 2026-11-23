@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+import Icon from '../../components/Icon.astro';
+import { CATEGORIES } from '../../config';
+
+export async function getStaticPaths() {
+  const items = await getCollection('realisations', (r) => !r.data.draft);
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props as { entry: CollectionEntry<'realisations'> };
+const { Content } = await render(entry);
+const d = entry.data;
+const facts = [
+  ['Lieu', d.lieu], ['Année', d.annee], ['Client', d.client],
+  ['Catégories', d.categories.map((c) => CATEGORIES[c]).join(', ')],
+].filter(([, v]) => v) as [string, string][];
+const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const highlight = (v: string) => esc(v).replace(/\[À COMPLÉTER[^\]]*\]/g, (m) => `<mark class="todo">${m}</mark>`);
+---
+<BaseLayout title={d.title} description={d.description} image={d.cover.src}>
+  <PageHero title={d.title} eyebrow="Réalisation" crumbs={[{ href: '/realisations/', label: 'Réalisations' }]} />
+  <article class="section">
+    <div class="container-mte grid gap-10 lg:grid-cols-[2fr_1fr] lg:gap-16">
+      <div>
+        <Image src={d.cover} alt={d.coverAlt} widths={[640, 960, 1400]} sizes="(min-width:1024px) 66vw, 100vw" loading="eager"
+          class="mb-10 aspect-[16/10] w-full object-cover" />
+        <div class="prose-mte"><Content /></div>
+        {d.gallery.length > 0 && (
+          <div class="mt-10 grid gap-4 sm:grid-cols-2">
+            {d.gallery.map((g) => <Image src={g.src} alt={g.alt} widths={[480, 800]} sizes="(min-width:640px) 33vw, 100vw" class="aspect-[4/3] w-full object-cover" />)}
+          </div>
+        )}
+      </div>
+      <aside class="self-start border border-steel-200 bg-steel-50 p-6 lg:sticky lg:top-28">
+        <h2 class="mb-4 text-2xl">En bref</h2>
+        <dl class="space-y-4">
+          {facts.map(([k, v]) => (
+            <div><dt class="font-display text-sm font-semibold uppercase tracking-[0.15em] text-steel-700">{k}</dt><dd class="font-semibold" set:html={highlight(v)} /></div>
+          ))}
+        </dl>
+        <a href="/contact/" class="btn-primary mt-6 w-full">Un projet similaire ? <Icon name="arrow" size={20} /></a>
+        <a href="/realisations/" class="mt-4 inline-flex items-center gap-2 font-semibold text-steel-800 underline hover:text-mte">← Toutes les réalisations</a>
+      </aside>
+    </div>
+  </article>
+  <CtaBanner />
+</BaseLayout>
